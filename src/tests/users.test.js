@@ -1,8 +1,8 @@
 const request = require("supertest")
-const app = require("../src/app")
+const app = require("../app")
 
-const User = require("../src/models/User")
-const sequelize = require("../src/config/database")
+const User = require("../models/User")
+const sequelize = require("../config/database")
 
 beforeAll(() => {
   return sequelize.sync()
