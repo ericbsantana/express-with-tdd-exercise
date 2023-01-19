@@ -90,4 +90,14 @@ describe("users /sign-up", () => {
     const body = response.body
     expect(body.errors.email).toBe("Email can't be null")
   })
+
+  it("should return errors when username and email are null", async () => {
+    const response = await postUser({
+      username: null,
+      email: null,
+      password: "russellisawesome",
+    })
+    const body = response.body
+    expect(Object.keys(body.errors)).toEqual(["username", "email"])
+  })
 })
