@@ -70,4 +70,21 @@ describe("user sign up", () => {
         })
       })
   })
+
+  it("should hash the user password", (done) => {
+    request(app)
+      .post("/sign-up")
+      .send({
+        username: "LudwigWittgenstein",
+        email: "ludwig@wittgenstein.com",
+        password: "russellisawesome",
+      })
+      .then(() => {
+        User.findAll().then((userList) => {
+          const savedUser = userList[0]
+          expect(savedUser.password).not.toBe("russellisawesome")
+          done()
+        })
+      })
+  })
 })
