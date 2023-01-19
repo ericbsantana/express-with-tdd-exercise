@@ -1,3 +1,6 @@
-const app = require("./app");
+const app = require("./src/app")
+const sequelize = require("./src/config/database")
 
-app.listen(3000, () => console.log("App is running!"));
+sequelize.sync()
+
+app.listen(3000, () => console.log("App is running!"))
