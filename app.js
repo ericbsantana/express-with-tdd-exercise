@@ -1,5 +1,9 @@
-const express = require("express");
+const express = require("express")
 
-const app = express();
+const app = express()
 
-module.exports = app;
+app.post("/sign-up", (req, res) => {
+  return res.status(200).send({ message: "User created" })
+})
+
+module.exports = app
