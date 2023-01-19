@@ -6,7 +6,11 @@ router.post("/sign-up", async (req, res) => {
   const user = req.body
 
   if (!user.username) {
-    return res.status(400).send()
+    return res.status(400).send({
+      errors: {
+        username: "Username can't be null",
+      },
+    })
   }
 
   await userService.save(req)
