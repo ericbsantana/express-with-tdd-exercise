@@ -60,4 +60,14 @@ describe("users /sign-up", () => {
 
     expect(response.statusCode).toBe(400)
   })
+
+  it("should return errors in response body if there is any", async () => {
+    const response = await postUser({
+      username: null,
+      email: "ludwig@wittgenstein.com",
+      password: "russellisawesome",
+    })
+    const body = response.body
+    expect(body.errors).not.toBeUndefined()
+  })
 })
