@@ -6,11 +6,9 @@ const validateUsername = (req, res, next) => {
   const user = req.body
 
   if (!user.username) {
-    return res.status(400).send({
-      errors: {
-        username: "Username can't be null",
-      },
-    })
+    req.errors = {
+      username: "Username can't be null",
+    }
   }
 
   next()
@@ -20,17 +18,20 @@ const validateEmail = (req, res, next) => {
   const user = req.body
 
   if (!user.email) {
-    return res.status(400).send({
-      errors: {
-        email: "Email can't be null",
-      },
-    })
+    req.errors = {
+      ...req.errors,
+      email: "Email can't be null",
+    }
   }
 
   next()
 }
 
 router.post("/sign-up", validateUsername, validateEmail, async (req, res) => {
+  if (req.errors) {
+    return res.status(400).send({ errors: req.errors })
+  }
+
   await userService.save(req)
   return res.status(200).send({ message: "User created" })
 })
