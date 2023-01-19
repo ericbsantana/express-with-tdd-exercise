@@ -1,9 +1,17 @@
 const Sequelize = require("sequelize")
+const config = require("config")
 
-const sequelize = new Sequelize("tdd-lovers", "tdd-user", "tdd-pwd", {
-  dialect: "sqlite",
-  storage: "./database.sqlite",
-  logging: false,
-})
+const databaseConfig = config.get("database")
+
+const sequelize = new Sequelize(
+  databaseConfig.name,
+  databaseConfig.username,
+  databaseConfig.password,
+  {
+    dialect: databaseConfig.dialect,
+    storage: databaseConfig.storage,
+    logging: databaseConfig.logging,
+  }
+)
 
 module.exports = sequelize

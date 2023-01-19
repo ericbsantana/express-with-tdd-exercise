@@ -3,4 +3,10 @@ const sequelize = require("./src/config/database")
 
 sequelize.sync()
 
-app.listen(3000, () => console.log("App is running!"))
+const port = 3000 || process.env.PORT
+
+app.listen(port, () =>
+  console.log(
+    `App is running on port ${port}. Environment: ${process.env.NODE_ENV}`
+  )
+)
