@@ -1,39 +1,27 @@
 const express = require("express")
 const userService = require("../services/user.service")
 const router = express.Router()
+const { check, validationResult } = require("express-validator")
 
-const validateUsername = (req, res, next) => {
-  const user = req.body
+router.post(
+  "/sign-up",
+  check("username").notEmpty().withMessage("Username can't be null"),
+  check("email").notEmpty().withMessage("Email can't be null"),
+  async (req, res) => {
+    const validationResultErrors = validationResult(req)
 
-  if (!user.username) {
-    req.errors = {
-      username: "Username can't be null",
+    if (!validationResultErrors.isEmpty()) {
+      const errors = {}
+      validationResultErrors
+        .array()
+        .forEach((element) => (errors[element.param] = element.msg))
+
+      return res.status(400).send({ errors })
     }
+
+    await userService.save(req)
+    return res.status(200).send({ message: "User created" })
   }
-
-  next()
-}
-
-const validateEmail = (req, res, next) => {
-  const user = req.body
-
-  if (!user.email) {
-    req.errors = {
-      ...req.errors,
-      email: "Email can't be null",
-    }
-  }
-
-  next()
-}
-
-router.post("/sign-up", validateUsername, validateEmail, async (req, res) => {
-  if (req.errors) {
-    return res.status(400).send({ errors: req.errors })
-  }
-
-  await userService.save(req)
-  return res.status(200).send({ message: "User created" })
-})
+)
 
 module.exports = router
