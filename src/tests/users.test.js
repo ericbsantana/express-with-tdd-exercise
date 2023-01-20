@@ -129,4 +129,12 @@ describe("users /sign-up", () => {
     const body = response.body
     expect(body.errors.email).toBe("E-mail already exists")
   })
+
+  it("should return errors when username is null and email is already registered", async () => {
+    await User.create({ ...validUser })
+    const response = await postUser({ ...validUser, username: null })
+    const body = response.body
+    expect(body.errors.email).toBe("E-mail already exists")
+    expect(body.errors.username).toBe("Username can't be null")
+  })
 })
