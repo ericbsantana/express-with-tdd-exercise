@@ -5,7 +5,12 @@ const { check, validationResult } = require("express-validator")
 
 router.post(
   "/sign-up",
-  check("username").notEmpty().withMessage("Username can't be null"),
+  check("username")
+    .notEmpty()
+    .withMessage("Username can't be null")
+    .bail()
+    .isLength({ min: 4 })
+    .withMessage("Must have at least 4 characters"),
   check("email").notEmpty().withMessage("Email can't be null"),
   check("password").notEmpty().withMessage("Password can't be null"),
   async (req, res) => {
