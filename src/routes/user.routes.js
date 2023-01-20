@@ -11,7 +11,12 @@ router.post(
     .bail()
     .isLength({ min: 4 })
     .withMessage("Must have at least 4 characters"),
-  check("email").notEmpty().withMessage("Email can't be null"),
+  check("email")
+    .notEmpty()
+    .withMessage("Email can't be null")
+    .bail()
+    .isEmail()
+    .withMessage("Invalid e-mail"),
   check("password").notEmpty().withMessage("Password can't be null"),
   async (req, res) => {
     const validationResultErrors = validationResult(req)
