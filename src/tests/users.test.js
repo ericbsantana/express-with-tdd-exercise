@@ -110,4 +110,16 @@ describe("users /sign-up", () => {
     const body = response.body
     expect(body.errors.username).toBe("Must have at least 4 characters")
   })
+
+  it("should return email invalid message", async () => {
+    const user = {
+      username: "LudwigWittgenstein",
+      email: "invalidmail",
+      password: "russellisawesome",
+    }
+
+    const response = await postUser(user)
+    const body = response.body
+    expect(body.errors.email).toBe("Invalid e-mail")
+  })
 })
