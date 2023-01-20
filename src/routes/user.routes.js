@@ -7,6 +7,7 @@ router.post(
   "/sign-up",
   check("username").notEmpty().withMessage("Username can't be null"),
   check("email").notEmpty().withMessage("Email can't be null"),
+  check("password").notEmpty().withMessage("Password can't be null"),
   async (req, res) => {
     const validationResultErrors = validationResult(req)
 
