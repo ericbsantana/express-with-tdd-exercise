@@ -122,4 +122,11 @@ describe("users /sign-up", () => {
     const body = response.body
     expect(body.errors.email).toBe("Invalid e-mail")
   })
+
+  it('should return "Email already registered" if email is already registered', async () => {
+    await User.create({ ...validUser })
+    const response = await postUser()
+    const body = response.body
+    expect(body.errors.email).toBe("E-mail already exists")
+  })
 })
