@@ -98,4 +98,16 @@ describe("users /sign-up", () => {
     const body = response.body
     expect(Object.keys(body.errors)).toEqual(["username", "email"])
   })
+
+  it("should return size validation error when username has less than 4 characters", async () => {
+    const user = {
+      username: "abc",
+      email: "ludwig@wittgenstein.com",
+      password: "russellisawesome",
+    }
+
+    const response = await postUser(user)
+    const body = response.body
+    expect(body.errors.username).toBe("Must have at least 4 characters")
+  })
 })
