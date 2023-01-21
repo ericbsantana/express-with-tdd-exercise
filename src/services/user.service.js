@@ -42,8 +42,11 @@ const activateAccount = async ({ token }) => {
 }
 
 const getUsers = async () => {
+  const users = await User.findAll({
+    limit: 10,
+  })
   return {
-    data: [],
+    data: users,
     page: 0,
     size: 10,
     totalPages: 0,
