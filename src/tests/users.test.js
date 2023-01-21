@@ -137,4 +137,11 @@ describe("users /sign-up", () => {
     expect(body.errors.email).toBe("E-mail already exists")
     expect(body.errors.username).toBe("Username can't be null")
   })
+
+  it("should create user unverified", async () => {
+    await postUser()
+    const users = await User.findAll()
+    const savedUser = users[0]
+    expect(savedUser.verified).toBe(false)
+  })
 })
