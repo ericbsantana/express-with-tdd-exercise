@@ -235,4 +235,14 @@ describe("account activation", () => {
     const response = await request(app).get(`/auth`)
     expect(response.status).toBe(404)
   })
+
+  it("should remove token when user activates account", async () => {
+    await postUser()
+    const [user] = await User.findAll()
+
+    await request(app).get(`/auth/${user.token}`)
+
+    const [activatedUser] = await User.findAll()
+    expect(activatedUser.token).toBeFalsy()
+  })
 })
