@@ -52,5 +52,12 @@ describe("User listing", () => {
       const response = await getUsers()
       expect(response.body.data.length).toBe(6)
     })
+
+    it("should return only id, username and email in content array for users", async () => {
+      await addUsers({ verifiedAccounts: 2 })
+      const response = await getUsers()
+      const user = response.body.data[0]
+      expect(Object.keys(user)).toEqual(["id", "username", "email"])
+    })
   })
 })
