@@ -5,19 +5,27 @@ const sendMail = async ({
   to,
   subject,
   html,
-}) => {
+}) =>
   await transporter.sendMail({
     from,
     to,
     subject,
     html,
   })
-}
 
 const sendActivateAccountEmail = async ({ token, to }) => {
   await sendMail({
     subject: "Activate your account",
-    html: `Your token is ${token}`,
+    html: `
+    <div>
+      <div>
+        Click the link below to activate your account:
+      </div>
+      <div>
+        <a href="http://localhost:3000/auth/${token}">Activate account</a>
+      </div>
+    </div>
+    `,
     to,
   })
 }
