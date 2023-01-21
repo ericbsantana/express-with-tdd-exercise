@@ -12,7 +12,7 @@ router.get("/auth/:token", async (req, res) => {
   }
 })
 
-router.get("/users", async (req, res) => {
+const pagination = (req, res, next) => {
   const castedPageAsNumber = Number.parseInt(req.query.page)
   const castedSizeAsNumber = Number.parseInt(req.query.size)
 
@@ -26,6 +26,12 @@ router.get("/users", async (req, res) => {
     size = 10
   }
 
+  req.pagination = { size, page }
+  next()
+}
+
+router.get("/users", pagination, async (req, res) => {
+  const { page, size } = req.pagination
   const users = await userService.getUsers({ page, size })
   return res.send(users)
 })
