@@ -14,12 +14,16 @@ router.get("/auth/:token", async (req, res) => {
 
 router.get("/users", async (req, res) => {
   let page = req.query.page ? Number.parseInt(req.query.page) : 0
+  let size = req.query.size ? Number.parseInt(req.query.size) : 10
 
   if (page < 0) {
     page = 0
   }
+  if (size > 10) {
+    size = 10
+  }
 
-  const users = await userService.getUsers({ page })
+  const users = await userService.getUsers({ page, size })
   return res.send(users)
 })
 
