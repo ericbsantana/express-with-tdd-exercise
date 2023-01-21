@@ -34,7 +34,7 @@ const findOne = async (fields) => {
 const activateAccount = async ({ token }) => {
   const userFound = await User.findOne({ where: { token } })
   await User.update(
-    { verified: true },
+    { verified: true, token: null },
     { where: { id: userFound.toJSON().id } }
   )
 }
