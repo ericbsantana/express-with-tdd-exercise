@@ -92,5 +92,12 @@ describe("User listing", () => {
       expect(response.body.data.length).toBe(10)
       expect(response.body.size).toBe(10)
     })
+
+    it("should return 10 users and corresponding size as 0 ", async () => {
+      await addUsers({ verifiedAccounts: 11 })
+      const response = await request(app).get("/users").query({ size: 0 })
+      expect(response.body.data.length).toBe(10)
+      expect(response.body.size).toBe(10)
+    })
   })
 })
