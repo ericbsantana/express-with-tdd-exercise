@@ -12,4 +12,8 @@ const save = async (req) => {
   await User.create(user)
 }
 
-module.exports = { save }
+const findOne = async (fields) => {
+  return User.findOne({ where: fields })
+}
+
+module.exports = { save, findOne }
