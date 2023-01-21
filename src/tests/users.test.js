@@ -254,4 +254,11 @@ describe("account activation", () => {
     const [activatedUser] = await User.findAll()
     expect(activatedUser.verified).toBe(false)
   })
+
+  it("should return 400 if token is invalid", async () => {
+    await postUser()
+    const token = "lalala"
+    const response = await request(app).get(`/auth/${token}`)
+    expect(response.status).toBe(400)
+  })
 })
