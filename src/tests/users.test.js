@@ -180,4 +180,14 @@ describe("users /sign-up", () => {
     expect(response.status).toBe(502)
     mockSendActivateAccountEmail.mockRestore()
   })
+
+  it("should return email failure message when sending email fails", async () => {
+    const mockSendActivateAccountEmail = jest
+      .spyOn(emailService, "sendActivateAccountEmail")
+      .mockRejectedValue()
+
+    const response = await postUser()
+    expect(response.body.message).toBe("Failed to send e-mail")
+    mockSendActivateAccountEmail.mockRestore()
+  })
 })
