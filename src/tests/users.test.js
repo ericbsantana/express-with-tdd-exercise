@@ -219,3 +219,15 @@ describe("account creation", () => {
     expect(users.length).toBe(0)
   })
 })
+
+describe("account activation", () => {
+  it("should activate account if correct token is sent", async () => {
+    await postUser()
+    const [user] = await User.findAll()
+
+    await request(app).get(`/auth/${user.token}`)
+
+    const [activatedUser] = await User.findAll()
+    expect(activatedUser.verified).toBe(true)
+  })
+})
