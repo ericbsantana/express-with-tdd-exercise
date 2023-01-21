@@ -78,5 +78,19 @@ describe("User listing", () => {
       const response = await request(app).get("/users").query({ page: -5 })
       expect(response.body.page).toBe(0)
     })
+
+    it("should 5 users and corresponding size indicator when size is set to 5", async () => {
+      await addUsers({ verifiedAccounts: 11 })
+      const response = await request(app).get("/users").query({ size: 5 })
+      expect(response.body.data.length).toBe(5)
+      expect(response.body.size).toBe(5)
+    })
+
+    it("should return 10 users and corresponding size as 1000 ", async () => {
+      await addUsers({ verifiedAccounts: 11 })
+      const response = await request(app).get("/users").query({ size: 1000 })
+      expect(response.body.data.length).toBe(10)
+      expect(response.body.size).toBe(10)
+    })
   })
 })
