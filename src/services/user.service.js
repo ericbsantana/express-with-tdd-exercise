@@ -41,11 +41,12 @@ const activateAccount = async ({ token }) => {
   await userFound.save()
 }
 
-const getUsers = async () => {
+const getUsers = async ({ page = 0 }) => {
   const limit = 10
 
   const users = await User.findAndCountAll({
     limit,
+    offset: page * limit,
     where: {
       verified: true,
     },
@@ -56,7 +57,7 @@ const getUsers = async () => {
 
   return {
     data: users.rows,
-    page: 0,
+    page: Number.parseInt(page),
     size: 10,
     totalPages,
   }
