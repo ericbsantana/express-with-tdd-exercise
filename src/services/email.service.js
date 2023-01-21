@@ -1,5 +1,4 @@
-const nodemailer = require("nodemailer")
-const nodemailerStub = require("nodemailer-stub")
+const transporter = require("../config/email")
 
 const sendMail = async ({
   from = "Express With TDD <express@tdd.com>",
@@ -7,8 +6,6 @@ const sendMail = async ({
   subject,
   html,
 }) => {
-  const transporter = nodemailer.createTransport(nodemailerStub.stubTransport)
-
   await transporter.sendMail({
     from,
     to,
