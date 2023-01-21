@@ -1,6 +1,7 @@
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
 const EmailService = require("./email.service")
+const { v4: uuid } = require("uuid")
 
 const save = async (req) => {
   const { username, email } = req.body
@@ -10,6 +11,7 @@ const save = async (req) => {
     username,
     email,
     password: hash,
+    token: uuid(),
   }
 
   const createdUser = await User.create(user)

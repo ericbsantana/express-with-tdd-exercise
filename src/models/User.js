@@ -23,7 +23,6 @@ User.init(
     },
     token: {
       type: Sequelize.UUIDV4,
-      defaultValue: Sequelize.UUIDV4,
     },
   },
   { sequelize, modelName: "user" }
