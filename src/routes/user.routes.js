@@ -12,6 +12,10 @@ router.get("/auth/:token", async (req, res) => {
   }
 })
 
+router.get("/users", async (req, res) => {
+  return res.send()
+})
+
 router.post(
   "/sign-up",
   check("username")
