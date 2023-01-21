@@ -42,18 +42,23 @@ const activateAccount = async ({ token }) => {
 }
 
 const getUsers = async () => {
-  const users = await User.findAll({
-    limit: 10,
+  const limit = 10
+
+  const users = await User.findAndCountAll({
+    limit,
     where: {
       verified: true,
     },
     attributes: ["id", "username", "email"],
   })
+
+  const totalPages = Math.ceil(users.count / limit)
+
   return {
-    data: users,
+    data: users.rows,
     page: 0,
     size: 10,
-    totalPages: 0,
+    totalPages,
   }
 }
 
