@@ -172,9 +172,12 @@ describe("users /sign-up", () => {
   })
 
   it("should return 502 bad gateway if email is not sent", async () => {
-    jest.spyOn(emailService, "sendActivateAccountEmail").mockRejectedValue()
+    const mockSendActivateAccountEmail = jest
+      .spyOn(emailService, "sendActivateAccountEmail")
+      .mockRejectedValue()
 
     const response = await postUser()
     expect(response.status).toBe(502)
+    mockSendActivateAccountEmail.mockRestore()
   })
 })
