@@ -47,6 +47,7 @@ const getUsers = async () => {
     where: {
       verified: true,
     },
+    attributes: ["id", "username", "email"],
   })
   return {
     data: users,
