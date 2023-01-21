@@ -17,6 +17,10 @@ User.init(
     password: {
       type: Sequelize.STRING,
     },
+    verified: {
+      type: Sequelize.BOOLEAN,
+      defaultValue: false,
+    },
   },
   { sequelize, modelName: "user" }
 )
