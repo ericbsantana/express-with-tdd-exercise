@@ -261,4 +261,11 @@ describe("account activation", () => {
     const response = await request(app).get(`/auth/${token}`)
     expect(response.status).toBe(400)
   })
+
+  it("should return 'Invalid token' if token is invalid", async () => {
+    await postUser()
+    const token = "lalala"
+    const response = await request(app).get(`/auth/${token}`)
+    expect(response.body.message).toBe("Invalid token")
+  })
 })
