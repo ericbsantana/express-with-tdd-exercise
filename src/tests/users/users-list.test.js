@@ -59,5 +59,11 @@ describe("User listing", () => {
       const user = response.body.data[0]
       expect(Object.keys(user)).toEqual(["id", "username", "email"])
     })
+
+    it("should return 2 totalPages when there are 15 active and 7 inactive users", async () => {
+      await addUsers({ verifiedAccounts: 15, unverifiedAccounts: 7 })
+      const response = await getUsers()
+      expect(response.body.totalPages).toBe(2)
+    })
   })
 })
