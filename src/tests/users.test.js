@@ -51,7 +51,7 @@ const validUser = {
 
 const postUser = (user = validUser) => request(app).post("/sign-up").send(user)
 
-describe("users /sign-up", () => {
+describe("account creation", () => {
   it("should return 200 OK when sign up is valid", (done) => {
     postUser().expect(200).end(done)
   })
