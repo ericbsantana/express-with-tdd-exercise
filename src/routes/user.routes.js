@@ -16,7 +16,13 @@ router.post(
     .withMessage("Email can't be null")
     .bail()
     .isEmail()
-    .withMessage("Invalid e-mail"),
+    .withMessage("Invalid e-mail")
+    .custom(async (email) => {
+      const user = await userService.findOne({ email })
+      if (user) {
+        throw new Error("E-mail already exists")
+      }
+    }),
   check("password").notEmpty().withMessage("Password can't be null"),
   async (req, res) => {
     const validationResultErrors = validationResult(req)
