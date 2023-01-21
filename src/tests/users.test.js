@@ -151,4 +151,11 @@ describe("users /sign-up", () => {
     const savedUser = users[0]
     expect(savedUser.verified).toBe(false)
   })
+
+  it("should create user with token", async () => {
+    await postUser()
+    const users = await User.findAll()
+    const savedUser = users[0]
+    expect(savedUser.token).toBeTruthy()
+  })
 })
