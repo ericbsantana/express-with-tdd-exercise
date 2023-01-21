@@ -99,5 +99,14 @@ describe("User listing", () => {
       expect(response.body.data.length).toBe(10)
       expect(response.body.size).toBe(10)
     })
+
+    it("should return page = 0 and size = 10 when non numeric query parameter provided", async () => {
+      await addUsers({ verifiedAccounts: 11 })
+      const response = await request(app)
+        .get("/users")
+        .query({ size: "lala", page: "lalala" })
+      expect(response.body.page).toBe(0)
+      expect(response.body.size).toBe(10)
+    })
   })
 })
