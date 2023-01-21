@@ -41,4 +41,13 @@ const activateAccount = async ({ token }) => {
   await userFound.save()
 }
 
-module.exports = { save, findOne, activateAccount }
+const getUsers = async () => {
+  return {
+    data: [],
+    page: 0,
+    size: 10,
+    totalPages: 0,
+  }
+}
+
+module.exports = { save, findOne, activateAccount, getUsers }

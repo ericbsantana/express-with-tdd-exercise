@@ -13,12 +13,8 @@ router.get("/auth/:token", async (req, res) => {
 })
 
 router.get("/users", async (req, res) => {
-  return res.send({
-    data: [],
-    page: 0,
-    size: 10,
-    totalPages: 0,
-  })
+  const users = await userService.getUsers()
+  return res.send(users)
 })
 
 router.post(
