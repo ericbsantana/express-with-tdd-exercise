@@ -5,6 +5,7 @@ const User = require("../models/User")
 const sequelize = require("../config/database")
 
 const nodemailerStub = require("nodemailer-stub")
+const emailService = require("../services/email.service")
 
 beforeAll(() => {
   return sequelize.sync()
@@ -168,5 +169,12 @@ describe("users /sign-up", () => {
     const users = await User.findAll()
     const savedUser = users[0]
     expect(lastMail.content).toContain(savedUser.token)
+  })
+
+  it("should return 502 bad gateway if email is not sent", async () => {
+    jest.spyOn(emailService, "sendActivateAccountEmail").mockRejectedValue()
+
+    const response = await postUser()
+    expect(response.status).toBe(502)
   })
 })
