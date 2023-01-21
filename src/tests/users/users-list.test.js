@@ -46,5 +46,11 @@ describe("User listing", () => {
       const response = await getUsers()
       expect(response.body.data.length).toBe(10)
     })
+
+    it("should return 6 verified users in page content when there are 6 verified users and 5 unverified users", async () => {
+      await addUsers({ unverifiedAccounts: 5, verifiedAccounts: 6 })
+      const response = await getUsers()
+      expect(response.body.data.length).toBe(6)
+    })
   })
 })
