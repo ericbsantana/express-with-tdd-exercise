@@ -19,7 +19,7 @@ router.get("/users", async (req, res) => {
   if (page < 0) {
     page = 0
   }
-  if (size > 10) {
+  if (size > 10 || size < 1) {
     size = 10
   }
 
