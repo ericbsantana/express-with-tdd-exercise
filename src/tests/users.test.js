@@ -4,6 +4,8 @@ const app = require("../app")
 const User = require("../models/User")
 const sequelize = require("../config/database")
 
+const nodemailerStub = require("nodemailer-stub")
+
 beforeAll(() => {
   return sequelize.sync()
 })
@@ -157,5 +159,14 @@ describe("users /sign-up", () => {
     const users = await User.findAll()
     const savedUser = users[0]
     expect(savedUser.token).toBeTruthy()
+  })
+
+  it("should send an email with activation token", async () => {
+    await postUser()
+    const lastMail = nodemailerStub.interactsWithMail.lastMail()
+    expect(lastMail.to[0]).toContain("ludwig@wittgenstein.com")
+    const users = await User.findAll()
+    const savedUser = users[0]
+    expect(lastMail.content).toContain(savedUser.token)
   })
 })
