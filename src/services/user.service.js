@@ -31,4 +31,12 @@ const findOne = async (fields) => {
   return User.findOne({ where: fields })
 }
 
-module.exports = { save, findOne }
+const activateAccount = async ({ token }) => {
+  const userFound = await User.findOne({ where: { token } })
+  await User.update(
+    { verified: true },
+    { where: { id: userFound.toJSON().id } }
+  )
+}
+
+module.exports = { save, findOne, activateAccount }

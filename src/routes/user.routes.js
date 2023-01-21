@@ -2,14 +2,9 @@ const express = require("express")
 const userService = require("../services/user.service")
 const router = express.Router()
 const { check, validationResult } = require("express-validator")
-const User = require("../models/User")
 
 router.get("/auth/:token", async (req, res) => {
-  const userFound = await userService.findOne({ token: req.params.token })
-  await User.update(
-    { verified: true },
-    { where: { id: userFound.toJSON().id } }
-  )
+  await userService.activateAccount({ token: req.params.token })
   res.send()
 })
 
