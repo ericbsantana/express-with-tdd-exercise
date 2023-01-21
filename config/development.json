@@ -3,8 +3,16 @@
 		"name": "tdd-lovers",
 		"username": "tdd-user",
 		"password": "tdd-pwd",
-		"dialect":"sqlite",
+		"dialect": "sqlite",
 		"storage": "./database.sqlite",
 		"logging": false
+	},
+	"mail": {
+		"host": "smtp.ethereal.email",
+		"port": 587,
+		"auth": {
+			"user": "guiseppe91@ethereal.email",
+			"pass": "SfSP8SwsDM2HJk4z7Q"
+		}
 	}
 }
