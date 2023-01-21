@@ -72,5 +72,11 @@ describe("User listing", () => {
       expect(response.body.data[0].username).toBe("philosopher11")
       expect(response.body.page).toBe(1)
     })
+
+    it("should return first page when page is below zero", async () => {
+      await addUsers({ verifiedAccounts: 12 })
+      const response = await request(app).get("/users").query({ page: -5 })
+      expect(response.body.page).toBe(0)
+    })
   })
 })
