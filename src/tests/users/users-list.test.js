@@ -13,12 +13,13 @@ beforeEach(() => {
 })
 
 const getUsers = async () => request(app).get("/users")
-const addUsers = async (count) => {
-  for (let i = 1; i < count; i++) {
+const addUsers = async ({ verifiedAccounts = 0, unverifiedAccounts = 0 }) => {
+  for (let i = 1; i < verifiedAccounts + unverifiedAccounts; i++) {
     await User.create({
       username: `philosopher${i}`,
       email: `philosopher${i}@phi.com`,
       password: `ilovemathtoo`,
+      verified: i >= unverifiedAccounts,
     })
   }
 }
@@ -41,7 +42,7 @@ describe("User listing", () => {
     })
 
     it("should return 10 users in page content when there are 11 users in database", async () => {
-      await addUsers(11)
+      await addUsers({ unverifiedAccounts: 11 })
       const response = await getUsers()
       expect(response.body.data.length).toBe(10)
     })
