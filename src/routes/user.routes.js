@@ -6,10 +6,10 @@ const { check, validationResult } = require("express-validator")
 router.get("/auth/:token", async (req, res) => {
   try {
     await userService.activateAccount({ token: req.params.token })
+    return res.status(200).send()
   } catch (err) {
-    return res.send(400)
+    return res.status(400).send({ message: err.message })
   }
-  return res.send()
 })
 
 router.post(
