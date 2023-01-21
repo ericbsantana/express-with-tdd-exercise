@@ -13,7 +13,13 @@ router.get("/auth/:token", async (req, res) => {
 })
 
 router.get("/users", async (req, res) => {
-  const users = await userService.getUsers({ page: req.query.page })
+  let page = req.query.page ? Number.parseInt(req.query.page) : 0
+
+  if (page < 0) {
+    page = 0
+  }
+
+  const users = await userService.getUsers({ page })
   return res.send(users)
 })
 
