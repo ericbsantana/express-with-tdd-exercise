@@ -44,6 +44,9 @@ const activateAccount = async ({ token }) => {
 const getUsers = async () => {
   const users = await User.findAll({
     limit: 10,
+    where: {
+      verified: true,
+    },
   })
   return {
     data: users,
