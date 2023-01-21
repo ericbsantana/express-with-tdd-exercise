@@ -144,4 +144,11 @@ describe("users /sign-up", () => {
     const savedUser = users[0]
     expect(savedUser.verified).toBe(false)
   })
+
+  it("should not allow verified field to be in the body", async () => {
+    await postUser({ ...validUser, verified: true })
+    const users = await User.findAll()
+    const savedUser = users[0]
+    expect(savedUser.verified).toBe(false)
+  })
 })
