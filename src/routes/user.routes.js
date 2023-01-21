@@ -40,7 +40,7 @@ router.post(
       await userService.save(req)
       return res.status(200).send({ message: "User created" })
     } catch (err) {
-      return res.status(502).send()
+      return res.status(502).send({ message: err.message })
     }
   }
 )

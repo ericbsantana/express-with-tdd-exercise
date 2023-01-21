@@ -14,7 +14,11 @@ const save = async (req) => {
 
   const createdUser = await User.create(user)
   const { token } = await createdUser.toJSON()
-  await EmailService.sendActivateAccountEmail({ to: email, token })
+  try {
+    await EmailService.sendActivateAccountEmail({ to: email, token })
+  } catch (err) {
+    throw new Error("Failed to send e-mail")
+  }
 }
 
 const findOne = async (fields) => {
