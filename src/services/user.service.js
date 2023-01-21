@@ -33,10 +33,12 @@ const findOne = async (fields) => {
 
 const activateAccount = async ({ token }) => {
   const userFound = await User.findOne({ where: { token } })
-  await User.update(
-    { verified: true, token: null },
-    { where: { id: userFound.toJSON().id } }
-  )
+  if (!userFound) {
+    throw new Error("Invalid token")
+  }
+  userFound.verified = true
+  userFound.token = false
+  await userFound.save()
 }
 
 module.exports = { save, findOne, activateAccount }

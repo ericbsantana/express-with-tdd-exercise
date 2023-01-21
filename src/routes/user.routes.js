@@ -4,8 +4,10 @@ const router = express.Router()
 const { check, validationResult } = require("express-validator")
 
 router.get("/auth/:token", async (req, res) => {
-  await userService.activateAccount({ token: req.params.token })
-  res.send()
+  try {
+    await userService.activateAccount({ token: req.params.token })
+  } catch (err) {}
+  return res.send()
 })
 
 router.post(
