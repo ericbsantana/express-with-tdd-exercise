@@ -40,9 +40,7 @@ router.post(
       await userService.save(req)
       return res.status(200).send({ message: "User created" })
     } catch (err) {
-      return res
-        .status(400)
-        .send({ errors: { email: "E-mail already exists" } })
+      return res.status(502).send()
     }
   }
 )

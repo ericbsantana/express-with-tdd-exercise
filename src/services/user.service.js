@@ -1,6 +1,6 @@
 const User = require("../models/User")
 const bcrypt = require("bcrypt")
-const { sendActivateAccountEmail } = require("./email.service")
+const EmailService = require("./email.service")
 
 const save = async (req) => {
   const { username, email } = req.body
@@ -14,8 +14,7 @@ const save = async (req) => {
 
   const createdUser = await User.create(user)
   const { token } = await createdUser.toJSON()
-
-  await sendActivateAccountEmail({ to: email, token })
+  await EmailService.sendActivateAccountEmail({ to: email, token })
 }
 
 const findOne = async (fields) => {
