@@ -230,4 +230,9 @@ describe("account activation", () => {
     const [activatedUser] = await User.findAll()
     expect(activatedUser.verified).toBe(true)
   })
+
+  it("should return 404 if nothing is sent to route", async () => {
+    const response = await request(app).get(`/auth`)
+    expect(response.status).toBe(404)
+  })
 })
