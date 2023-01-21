@@ -13,6 +13,15 @@ beforeEach(() => {
 })
 
 const getUsers = async () => request(app).get("/users")
+const addUsers = async (count) => {
+  for (let i = 1; i < count; i++) {
+    await User.create({
+      username: `philosopher${i}`,
+      email: `philosopher${i}@phi.com`,
+      password: `ilovemathtoo`,
+    })
+  }
+}
 
 describe("User listing", () => {
   describe("GET /users", () => {
@@ -32,13 +41,7 @@ describe("User listing", () => {
     })
 
     it("should return 10 users in page content when there are 11 users in database", async () => {
-      for (let i = 0; i < 11; i++) {
-        await User.create({
-          username: `philosopher${i}`,
-          email: `philosopher${i}@phi.com`,
-          password: `ilovemathtoo`,
-        })
-      }
+      await addUsers(11)
       const response = await getUsers()
       expect(response.body.data.length).toBe(10)
     })
