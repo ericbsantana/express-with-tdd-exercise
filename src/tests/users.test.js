@@ -245,4 +245,13 @@ describe("account activation", () => {
     const [activatedUser] = await User.findAll()
     expect(activatedUser.token).toBeFalsy()
   })
+
+  it("should not activate account if token is invalid", async () => {
+    await postUser()
+    const token = "lalala"
+    await request(app).get(`/auth/${token}`)
+
+    const [activatedUser] = await User.findAll()
+    expect(activatedUser.verified).toBe(false)
+  })
 })
