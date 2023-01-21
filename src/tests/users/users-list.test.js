@@ -65,5 +65,12 @@ describe("User listing", () => {
       const response = await getUsers()
       expect(response.body.totalPages).toBe(2)
     })
+
+    it("should return second page users and page indicator", async () => {
+      await addUsers({ verifiedAccounts: 12 })
+      const response = await request(app).get("/users").query({ page: 1 })
+      expect(response.body.data[0].username).toBe("philosopher11")
+      expect(response.body.page).toBe(1)
+    })
   })
 })
