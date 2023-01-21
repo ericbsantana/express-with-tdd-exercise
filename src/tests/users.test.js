@@ -190,4 +190,16 @@ describe("users /sign-up", () => {
     expect(response.body.message).toBe("Failed to send e-mail")
     mockSendActivateAccountEmail.mockRestore()
   })
+
+  it("should not save user in database when activation email fails", async () => {
+    const mockSendActivateAccountEmail = jest
+      .spyOn(emailService, "sendActivateAccountEmail")
+      .mockRejectedValue()
+
+    await postUser()
+    const users = await User.findAll()
+
+    expect(users.length).toBe(0)
+    mockSendActivateAccountEmail.mockRestore()
+  })
 })
