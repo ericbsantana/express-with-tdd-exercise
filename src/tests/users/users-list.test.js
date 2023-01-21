@@ -12,15 +12,17 @@ beforeEach(() => {
   return User.destroy({ truncate: true })
 })
 
+const getUsers = async () => request(app).get("/users")
+
 describe("User listing", () => {
   describe("GET /users", () => {
     it("should return 200 if no user is on database", async () => {
-      const response = await request(app).get("/users")
+      const response = await getUsers()
       expect(response.status).toBe(200)
     })
 
     it("should return page object as response body", async () => {
-      const response = await request(app).get("/users")
+      const response = await getUsers()
       expect(response.body).toEqual({
         data: [],
         page: 0,
@@ -37,7 +39,7 @@ describe("User listing", () => {
           password: `ilovemathtoo`,
         })
       }
-      const response = await request(app).get("/users")
+      const response = await getUsers()
       expect(response.body.data.length).toBe(10)
     })
   })
