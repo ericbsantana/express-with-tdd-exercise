@@ -41,8 +41,8 @@ describe("User listing", () => {
       })
     })
 
-    it("should return 10 users in page content when there are 11 users in database", async () => {
-      await addUsers({ unverifiedAccounts: 11 })
+    it("should return 10 verified users in page content when there are 11 users in database", async () => {
+      await addUsers({ verifiedAccounts: 11 })
       const response = await getUsers()
       expect(response.body.data.length).toBe(10)
     })
