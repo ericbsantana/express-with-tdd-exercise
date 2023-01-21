@@ -1,18 +1,46 @@
 const request = require("supertest")
+const SMTPServer = require("smtp-server").SMTPServer
 const app = require("../app")
 
 const User = require("../models/User")
 const sequelize = require("../config/database")
 
-const nodemailerStub = require("nodemailer-stub")
-const emailService = require("../services/email.service")
+let lastMail, server
+let simulateSMTPError = false
 
-beforeAll(() => {
+beforeAll(async () => {
+  server = new SMTPServer({
+    authOptional: true,
+    onData: (stream, session, callback) => {
+      let mailBody
+      stream.on("data", (data) => {
+        mailBody += data.toString()
+      })
+
+      stream.on("end", () => {
+        if (simulateSMTPError) {
+          const error = new Error("Failed to deliver e-mail")
+          error.responseCode = 553
+          return callback(error)
+        }
+        lastMail = mailBody
+        callback()
+      })
+    },
+  })
+
+  await server.listen(7172, "localhost")
+
   return sequelize.sync()
 })
 
 beforeEach(() => {
+  simulateSMTPError = false
   return User.destroy({ truncate: true })
+})
+
+afterAll(async () => {
+  await server.close()
 })
 
 const validUser = {
@@ -164,42 +192,30 @@ describe("users /sign-up", () => {
 
   it("should send an email with activation token", async () => {
     await postUser()
-    const lastMail = nodemailerStub.interactsWithMail.lastMail()
-    expect(lastMail.to[0]).toContain("ludwig@wittgenstein.com")
     const users = await User.findAll()
     const savedUser = users[0]
-    expect(lastMail.content).toContain(savedUser.token)
+    expect(lastMail).toContain("ludwig@wittgenstein.com")
+    expect(lastMail).toContain(savedUser.token)
   })
 
   it("should return 502 bad gateway if email is not sent", async () => {
-    const mockSendActivateAccountEmail = jest
-      .spyOn(emailService, "sendActivateAccountEmail")
-      .mockRejectedValue()
-
+    simulateSMTPError = true
     const response = await postUser()
     expect(response.status).toBe(502)
-    mockSendActivateAccountEmail.mockRestore()
   })
 
   it("should return email failure message when sending email fails", async () => {
-    const mockSendActivateAccountEmail = jest
-      .spyOn(emailService, "sendActivateAccountEmail")
-      .mockRejectedValue()
-
+    simulateSMTPError = true
     const response = await postUser()
     expect(response.body.message).toBe("Failed to send e-mail")
-    mockSendActivateAccountEmail.mockRestore()
   })
 
   it("should not save user in database when activation email fails", async () => {
-    const mockSendActivateAccountEmail = jest
-      .spyOn(emailService, "sendActivateAccountEmail")
-      .mockRejectedValue()
+    simulateSMTPError = true
 
     await postUser()
     const users = await User.findAll()
 
     expect(users.length).toBe(0)
-    mockSendActivateAccountEmail.mockRestore()
   })
 })
